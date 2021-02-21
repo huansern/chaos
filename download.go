@@ -27,12 +27,14 @@ func download(link string) error {
 
 	client := http.Client{}
 
+	start := time.Now()
 	res, err := client.Do(req)
 	if err != nil {
 		return err
 	}
 
-	f, err := os.OpenFile(getFilename(link), os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0666)
+	filename := getFilename(link)
+	f, err := os.OpenFile(filename, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0666)
 	if err != nil {
 		return err
 	}
@@ -42,6 +44,6 @@ func download(link string) error {
 		return err
 	}
 
-	fmt.Printf("Downloaded %d bytes", n)
+	fmt.Printf("Downloaded %s (%d bytes) in %.02f seconds.\n", filename, n, time.Now().Sub(start).Seconds())
 	return nil
 }
