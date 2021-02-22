@@ -20,13 +20,11 @@ func getFilename(link string) string {
 	return name
 }
 
-func download(ctx context.Context, link string) error {
+func download(ctx context.Context, client *http.Client, link string) error {
 	req, err := http.NewRequest("GET", link, nil)
 	if err != nil {
 		return err
 	}
-
-	client := http.Client{}
 
 	start := time.Now()
 	res, err := client.Do(req)
