@@ -1,8 +1,9 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"io"
+	"github.com/huansern/chaos/io"
 	"net/http"
 	"os"
 	"strings"
@@ -19,7 +20,7 @@ func getFilename(link string) string {
 	return name
 }
 
-func download(link string) error {
+func download(ctx context.Context, link string) error {
 	req, err := http.NewRequest("GET", link, nil)
 	if err != nil {
 		return err
@@ -39,7 +40,7 @@ func download(link string) error {
 		return err
 	}
 
-	n, err := io.CopyBuffer(f, res.Body, make([]byte, 32*1024))
+	n, err := io.Copy(ctx, f, res.Body, nil)
 	if err != nil {
 		return err
 	}
